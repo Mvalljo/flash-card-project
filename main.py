@@ -3,10 +3,11 @@ import pandas
 import random
 
 BACKGROUND_COLOR = "#B1DDC6"
-
+# Get French/English words from file from previous session
 try:
-    data = pandas.read_csv("./data/words_to_lean.csv")
+    data = pandas.read_csv("./data/words_to_learn.csv")
     data_dict = data.to_dict(orient="records")
+# If no file from previous session get words from file for new session
 except FileNotFoundError:
     data = pandas.read_csv("./data/french_words.csv")
     data_dict = data.to_dict(orient="records")
@@ -18,11 +19,12 @@ def words_to_learn():
     random_word()
     data_dict.remove(word)
     # Afterwards it should be saved to new file words_to_lean.csv
-    # data.to_csv("words_to_lean.csv", index=False)
+    # data.to_csv("words_to_learn.csv", index=False)
     new_data_dict = pandas.DataFrame(data_dict)
-    new_data_dict.to_csv("./data/words_to_lean.csv", index=False)
+    new_data_dict.to_csv("./data/words_to_learn.csv", index=False)
 
 
+# Shows French word in front and after 3s flips card to show English translation
 def random_word():
     global word, timer
     window.after_cancel(timer)
@@ -33,6 +35,7 @@ def random_word():
     timer = window.after(3000, func=flip_card)
 
 
+# ---------------------------- UI SETUP ------------------------------- #
 def flip_card():
     canvas.itemconfig(canvas_img, image=back_card_img)
     canvas.itemconfig(front_title, text="English")
@@ -54,6 +57,7 @@ front_title = canvas.create_text(400, 150, text="Title", font=("Ariel", 40, "ita
 front_word = canvas.create_text(400, 263, text="word", font=("Ariel", 40, "italic"), tags="word")
 random_word()
 
+# Button
 wrong_img = PhotoImage(file="./images/wrong.png")
 wrong_btn = Button(image=wrong_img, highlightthickness=0, bd=0, command=random_word)
 wrong_btn.grid(column=0, row=2)
