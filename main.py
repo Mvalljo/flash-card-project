@@ -4,8 +4,23 @@ import random
 
 BACKGROUND_COLOR = "#B1DDC6"
 
-data = pandas.read_csv("./data/french_words.csv")
-data_dict = data.to_dict(orient="records")
+try:
+    data = pandas.read_csv("./data/words_to_lean.csv")
+    data_dict = data.to_dict(orient="records")
+except FileNotFoundError:
+    data = pandas.read_csv("./data/french_words.csv")
+    data_dict = data.to_dict(orient="records")
+
+
+# If user clicks on right it should remove word from data_list
+# remove()
+def words_to_learn():
+    random_word()
+    data_dict.remove(word)
+    # Afterwards it should be saved to new file words_to_lean.csv
+    # data.to_csv("words_to_lean.csv", index=False)
+    new_data_dict = pandas.DataFrame(data_dict)
+    new_data_dict.to_csv("./data/words_to_lean.csv", index=False)
 
 
 def random_word():
@@ -44,7 +59,7 @@ wrong_btn = Button(image=wrong_img, highlightthickness=0, bd=0, command=random_w
 wrong_btn.grid(column=0, row=2)
 
 right_img = PhotoImage(file="./images/right.png")
-right_btn = Button(image=right_img, highlightthickness=0, bd=0, command=random_word)
+right_btn = Button(image=right_img, highlightthickness=0, bd=0, command=words_to_learn)
 right_btn.grid(column=1, row=2)
 
 window.mainloop()
